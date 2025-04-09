@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CleanSweep - Windows Optimizer</title>
+    <style>
+        /* Reset and base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            color: #e0f2fe;
+            min-height: 100vh;
+            overflow-x: hidden;
+            background-color: #0f172a;
+        }
+
+        /* Animated Background */
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .gradient-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(125deg, #0f172a 0%, #1e293b 25%, #0c4a6e 50%, #1e293b 75%, #0f172a 100%);
+            background-size: 400% 400%;
+            animation: gradientAnimation 15s ease infinite;
+        }
+
+        @keyframes gradientAnimation {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(56, 189, 248, 0.2);
+            animation: float 8s infinite;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) translateX(0);
+            }
+            25% {
+                transform: translateY(-20px) translateX(10px);
+            }
+            50% {
+                transform: translateY(0) translateX(20px);
+            }
+            75% {
+                transform: translateY(20px) translateX(10px);
+            }
+        }
+
+        /* Cursor Follower */
+        .cursor-follower {
+            position: fixed;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(56, 189, 248, 0.6) 0%, rgba(56, 189, 248, 0) 70%);
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease, width 0.3s ease, height 0.3s ease;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+        }
+
+        /* Header */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        header.scrolled {
+            padding: 15px 0;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: #e0f2fe;
+        }
+
+        .logo-icon {
+            margin-right: 10px;
+            font-size: 1.4rem;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #e0f2fe;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: #38bdf8;
+            transition: width 0.3s ease;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        .access-btn {
+            background-color: rgba(56, 189, 248, 0.2);
+            color: #e0f2fe;
+            border: 1px solid #38bdf8;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.3);
+        }
+
+        .access-btn:hover {
+            background-color: rgba(56, 189, 248, 0.3);
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.5);
+            transform: translateY(-3px) scale(1.05);
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 160px 0 80px;
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, #38bdf8, #0ea5e9);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1s forwards 0.3s;
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1s forwards 0.6s;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .highlight {
+            background-color: rgba(56, 189, 248, 0.2);
+            padding: 5px 15px;
+            border-radius: 50px;
+            font-weight: 500;
+        }
+
+        .subtext {
+            font-size: 1rem;
+            opacity: 0.8;
+            margin-bottom: 40px;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1s forwards 0.9s;
+        }
+
+        /* Buttons */
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 60px;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1s forwards 1.2s;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+
+        .btn:hover::before {
+            transform: translateX(0);
+        }
+
+        .btn-primary {
+            background: linear-gradient(90deg, #0ea5e9, #38bdf8);
+            color: white;
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.5);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 0 30px rgba(56, 189, 248, 0.7);
+        }
+
+        .btn-secondary {
+            background-color: rgba(56, 189, 248, 0.1);
+            color: #e0f2fe;
+            border: 1px solid rgba(56, 189, 248, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background-color: rgba(56, 189, 248, 0.2);
+            transform: translateY(-3px) scale(1.05);
+        }
+
+        .btn-icon {
+            margin-right: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 120px 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 60px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background-color: rgba(56, 189, 248, 0.2);
+            padding: 5px 15px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            margin-right: 20px;
+            border: 1px solid rgba(56, 189, 248, 0.3);
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            background: linear-gradient(90deg, #38bdf8, #0ea5e9);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            font-size: 0.9rem;
+            margin-left: auto;
+            margin-top: 20px;
+        }
+
+        .stats-icon {
+            margin-right: 10px;
+            color: #38bdf8;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .feature-card {
+            background-color: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(56, 189, 248, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 0 40px rgba(56, 189, 248, 0.2);
+        }
+
+        .try-it {
+            padding: 30px;
+        }
+
+        .try-it h3 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: #e0f2fe;
+        }
+
+        .try-it p {
+            margin-bottom: 30px;
+            opacity: 0.8;
+        }
+
+        .download-box {
+            background-color: rgba(15, 23, 42, 0.8);
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .download-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 30px rgba(56, 189, 248, 0.3);
+        }
+
+        .download-btn {
+            background: linear-gradient(90deg, #0ea5e9, #38bdf8);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.5);
+            display: inline-flex;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .download-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(56, 189, 248, 0.7);
+        }
+
+        .download-icon {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+
+        .feature-item {
+            display: flex;
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .feature-item:hover {
+            transform: translateX(10px);
+        }
+
+        .feature-item:hover .feature-icon {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.5);
+        }
+
+        .feature-icon {
+            background-color: rgba(56, 189, 248, 0.1);
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 20px;
+            flex-shrink: 0;
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            color: #38bdf8;
+            transition: all 0.3s ease;
+        }
+
+        .feature-content h3 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: #e0f2fe;
+        }
+
+        .feature-content p {
+            opacity: 0.8;
+            font-size: 0.95rem;
+        }
+
+        /* Instructions Section */
+        .instructions {
+            padding: 120px 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .steps-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-top: 60px;
+        }
+
+        .step-card {
+            background-color: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(56, 189, 248, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .step-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 0 40px rgba(56, 189, 248, 0.2);
+        }
+
+        .step-number {
+            position: absolute;
+            top: -15px;
+            right: 10px;
+            font-size: 5rem;
+            font-weight: 800;
+            color: rgba(56, 189, 248, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .step-icon {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: #38bdf8;
+            transition: all 0.3s ease;
+        }
+
+        .step-title {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: #e0f2fe;
+        }
+
+        .step-description {
+            color: rgba(224, 242, 254, 0.8);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        /* Tooltip */
+        .tooltip {
+            position: relative;
+        }
+
+        .tooltip-text {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%) scale(0.8);
+            background-color: rgba(15, 23, 42, 0.9);
+            color: #e0f2fe;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            z-index: 10;
+        }
+
+        /* For header elements, show tooltips below */
+        header .tooltip .tooltip-text {
+            top: 100%;
+            margin-top: 10px;
+        }
+
+        /* For header elements, adjust the arrow to point up */
+        header .tooltip .tooltip-text::after {
+            content: '';
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 5px;
+            border-style: solid;
+            border-color: transparent transparent rgba(15, 23, 42, 0.9) transparent;
+        }
+
+        /* For non-header elements, show tooltips above */
+        .tooltip:not(header .tooltip) .tooltip-text {
+            top: -40px;
+        }
+
+        /* For non-header elements, adjust the arrow to point down */
+        .tooltip:not(header .tooltip) .tooltip-text::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 5px;
+            border-style: solid;
+            border-color: rgba(15, 23, 42, 0.9) transparent transparent transparent;
+        }
+
+        .tooltip:hover .tooltip-text {
+            opacity: 1;
+            transform: translateX(-50%) scale(1);
+        }
+
+        /* For non-header tooltips, adjust hover position */
+        .tooltip:not(header .tooltip):hover .tooltip-text {
+            top: -50px;
+        }
+
+        /* Scroll Down Indicator */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            opacity: 0;
+            animation: fadeIn 1s forwards 1.5s;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        .scroll-text {
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .scroll-icon {
+            width: 30px;
+            height: 50px;
+            border: 2px solid #e0f2fe;
+            border-radius: 25px;
+            position: relative;
+        }
+
+        .scroll-icon::before {
+            content: '';
+            position: absolute;
+            top: 8px;
+            left: 50%;
+            width: 6px;
+            height: 6px;
+            background-color: #e0f2fe;
+            border-radius: 50%;
+            transform: translateX(-50%);
+            animation: scrollAnimation 2s infinite;
+        }
+
+        @keyframes scrollAnimation {
+            0% {
+                transform: translateX(-50%) translateY(0);
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(-50%) translateY(20px);
+                opacity: 0;
+            }
+        }
+
+        /* Popup Animation */
+        .popup-animation {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            font-size: 1.5rem;
+            color: #38bdf8;
+            animation: popupAnimation 1s forwards;
+            opacity: 0;
+        }
+
+        @keyframes popupAnimation {
+            0% {
+                transform: translateY(0) scale(0.5);
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-40px) scale(1.2);
+                opacity: 0;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .steps-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero h1 {
+                font-size: 3rem;
+            }
+
+            .hero p {
+                font-size: 1.2rem;
+            }
+
+            .btn-group {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            nav ul {
+                gap: 15px;
+            }
+
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .stats {
+                margin-left: 0;
+                margin-top: 20px;
+            }
+
+            .steps-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="background">
+        <div class="gradient-bg"></div>
+        <div class="particles" id="particles"></div>
+    </div>
+
+    <!-- Cursor Follower -->
+    <div class="cursor-follower" id="cursorFollower"></div>
+
+    <!-- Header -->
+    <header id="header">
+        <div class="header-container">
+            <div class="logo tooltip">
+                <span class="logo-icon">⚡</span>
+                CleanSweep
+                <span class="tooltip-text">Windows Optimizer</span>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#home" class="tooltip">Home<span class="tooltip-text">Back to top</span></a></li>
+                    <li><a href="#features" class="tooltip">Features<span class="tooltip-text">Discover capabilities</span></a></li>
+                    <li><a href="#instructions" class="tooltip">Instructions<span class="tooltip-text">How to use</span></a></li>
+                </ul>
+            </nav>
+            <button class="access-btn tooltip">Get Started<span class="tooltip-text">Download now</span></button>
+        </div>
+    </header>
+
+    <div class="container">
+        <section id="home" class="hero">
+            <h1>CleanSweep</h1>
+            <p>The ultimate <span class="highlight">Windows optimizer</span> for peak performance.</p>
+            <p class="subtext">Boost your PC's speed, clean unnecessary files, and enhance your computing experience</p>
+            
+            <div class="btn-group">
+                <a href="#features" class="btn btn-primary scroll-to tooltip">
+                    <span class="btn-icon">→</span>
+                    Explore Features
+                    <span class="tooltip-text">See what we offer</span>
+                </a>
+                <a href="#download" class="btn btn-secondary scroll-to tooltip">
+                    <span class="btn-icon">⬇️</span>
+                    Download Now
+                    <span class="tooltip-text">Get CleanSweep</span>
+                </a>
+            </div>
+
+            <div class="scroll-indicator">
+                <div class="scroll-text">Scroll Down</div>
+                <div class="scroll-icon"></div>
+            </div>
+        </section>
+
+        <section id="features" class="features">
+            <div class="section-header">
+                <div>
+                    <span class="badge">Advanced Tools</span>
+                    <h2 class="section-title">Powerful Features for<br>System Optimization</h2>
+                </div>
+                <div class="stats">
+                    <span class="stats-icon">🔄</span>
+                    <span>5,497,533 optimizations performed</span>
+                </div>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card try-it">
+                    <h3>Try it now</h3>
+                    <p>Download CleanSweep and start optimizing your Windows PC today.</p>
+                    
+                    <div class="download-box">
+                        <p>Get the latest version of CleanSweep for Windows</p>
+                        <a href="cleansweep.exe" download class="download-btn" id="downloadBtn">
+                            <span class="download-icon">⬇️</span>
+                            Download CleanSweep.exe
+                        </a>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            🚀
+                        </div>
+                        <div class="feature-content">
+                            <h3>Performance Boost</h3>
+                            <p>Optimize system processes and startup programs to significantly improve your PC's speed.</p>
+                        </div>
+                    </div>
+
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            🧹
+                        </div>
+                        <div class="feature-content">
+                            <h3>Deep Cleaning</h3>
+                            <p>Remove junk files, temporary data, and browser caches to free up valuable disk space.</p>
+                        </div>
+                    </div>
+
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            🛡️
+                        </div>
+                        <div class="feature-content">
+                            <h3>Privacy Protection</h3>
+                            <p>Secure your personal data by removing traces of your online activities.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="instructions" class="instructions">
+            <div class="section-header">
+                <div>
+                    <span class="badge">Getting Started</span>
+                    <h2 class="section-title">How to Use CleanSweep</h2>
+                </div>
+            </div>
+
+            <div class="steps-container">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <div class="step-icon">⬇️</div>
+                    <h3 class="step-title">Download & Install</h3>
+                    <p class="step-description">Download CleanSweep.exe from our website and run the installer. Follow the on-screen instructions to complete the installation process.</p>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <div class="step-icon">🔑</div>
+                    <h3 class="step-title">Authenticate</h3>
+                    <p class="step-description">Launch CleanSweep and log in with your credentials. First-time users can create an account directly from the application.</p>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <div class="step-icon">🔍</div>
+                    <h3 class="step-title">Scan Your System</h3>
+                    <p class="step-description">Run a comprehensive system scan to identify performance issues, junk files, and optimization opportunities.</p>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">4</div>
+                    <div class="step-icon">✨</div>
+                    <h3 class="step-title">Optimize</h3>
+                    <p class="step-description">Review the scan results and click "Optimize" to automatically fix issues and boost your system's performance.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Create particles
+        const particlesContainer = document.getElementById('particles');
+        const particleCount = 20;
+        
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+            
+            // Random size
+            const size = Math.random() * 100 + 50;
+            particle.style.width = `${size}px`;
+            particle.style.height = `${size}px`;
+            
+            // Random position
+            const posX = Math.random() * 100;
+            const posY = Math.random() * 100;
+            particle.style.left = `${posX}%`;
+            particle.style.top = `${posY}%`;
+            
+            // Random animation delay
+            particle.style.animationDelay = `${Math.random() * 8}s`;
+            
+            particlesContainer.appendChild(particle);
+        }
+        
+        // Cursor follower
+        const cursorFollower = document.getElementById('cursorFollower');
+        
+        document.addEventListener('mousemove', (e) => {
+            // Add a slight delay for smooth following
+            setTimeout(() => {
+                cursorFollower.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+            }, 50);
+        });
+        
+        // Expand cursor follower on hover over interactive elements
+        const interactiveElements = document.querySelectorAll('a, button, .feature-card, .step-card');
+        
+        interactiveElements.forEach(element => {
+            element.addEventListener('mouseenter', () => {
+                cursorFollower.style.width = '60px';
+                cursorFollower.style.height = '60px';
+                cursorFollower.style.backgroundColor = 'rgba(56, 189, 248, 0.2)';
+            });
+            
+            element.addEventListener('mouseleave', () => {
+                cursorFollower.style.width = '40px';
+                cursorFollower.style.height = '40px';
+                cursorFollower.style.backgroundColor = 'transparent';
+            });
+        });
+        
+        // Smooth scrolling
+        document.querySelectorAll('.scroll-to').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                if (targetElement) {
+                    // Smooth scroll with animation
+                    window.scrollTo({
+                        top: targetElement.offsetTop,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // Animate feature cards on scroll
+        const featureCards = document.querySelectorAll('.feature-card');
+        
+        function checkFeatureCards() {
+            const triggerBottom = window.innerHeight * 0.8;
+            
+            featureCards.forEach((card, index) => {
+                const cardTop = card.getBoundingClientRect().top;
+                
+                if (cardTop < triggerBottom) {
+                    setTimeout(() => {
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    }, index * 200); // Staggered animation
+                }
+            });
+        }
+        
+        // Initial check
+        window.addEventListener('load', checkFeatureCards);
+        
+        // Check on scroll
+        window.addEventListener('scroll', checkFeatureCards);
+        
+        // Header scroll effect
+        const header = document.getElementById('header');
+        
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+        
+        // Popup animation on hover
+        const hoverElements = document.querySelectorAll('.btn, .feature-item, .step-card, .download-btn');
+        
+        hoverElements.forEach(element => {
+            element.addEventListener('mouseenter', (e) => {
+                // Create popup element
+                const popup = document.createElement('div');
+                popup.classList.add('popup-animation');
+                
+                // Random emoji
+                const emojis = ['✨', '🚀', '💯', '🔥', '👍'];
+                popup.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                
+                // Position at mouse
+                popup.style.left = `${e.clientX}px`;
+                popup.style.top = `${e.clientY}px`;
+                
+                // Add to body
+                document.body.appendChild(popup);
+                
+                // Remove after animation
+                setTimeout(() => {
+                    popup.remove();
+                }, 1000);
+            });
+        });
+        
+        // Download button click
+        document.getElementById('downloadBtn').addEventListener('click', (e) => {
+            // Create popup notification
+            const notification = document.createElement('div');
+            notification.style.position = 'fixed';
+            notification.style.bottom = '20px';
+            notification.style.right = '20px';
+            notification.style.backgroundColor = 'rgba(15, 23, 42, 0.9)';
+            notification.style.color = '#e0f2fe';
+            notification.style.padding = '15px 20px';
+            notification.style.borderRadius = '10px';
+            notification.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.3)';
+            notification.style.zIndex = '9999';
+            notification.style.transform = 'translateY(100px)';
+            notification.style.opacity = '0';
+            notification.style.transition = 'all 0.3s ease';
+            notification.style.border = '1px solid rgba(56, 189, 248, 0.3)';
+            
+            notification.innerHTML = '<div style="display: flex; align-items: center;"><div style="font-size: 1.5rem; margin-right: 10px;">⬇️</div><div><div style="font-weight: bold; margin-bottom: 5px;">Download Started</div><div style="font-size: 0.9rem; opacity: 0.8;">CleanSweep.exe is being downloaded</div></div></div>';
+            
+            document.body.appendChild(notification);
+            
+            // Show notification
+            setTimeout(() => {
+                notification.style.transform = 'translateY(0)';
+                notification.style.opacity = '1';
+            }, 100);
+            
+            // Hide notification
+            setTimeout(() => {
+                notification.style.transform = 'translateY(100px)';
+                notification.style.opacity = '0';
+                
+                setTimeout(() => {
+                    notification.remove();
+                }, 300);
+            }, 3000);
+        });
+    </script>
+</body>
+</html>
