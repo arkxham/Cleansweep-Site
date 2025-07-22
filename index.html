@@ -125,17 +125,18 @@
             max-width: 1400px;
             width: 100%;
             padding: 2rem 0;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: flex-start;
+            min-height: 100vh;
         }
 
-        .section-header {
+        .features-section-header {
             text-align: center;
             margin-bottom: 3rem;
-            position: sticky;
-            top: 0;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(10px);
-            padding: 2rem 0;
-            z-index: 20;
+            width: 100%;
+            flex-shrink: 0;
         }
 
         .section-title {
@@ -171,6 +172,8 @@
             padding: 2rem;
             backdrop-filter: blur(10px);
             margin-bottom: 2rem;
+            width: 100%;
+            flex: 1;
         }
 
         .features-grid {
@@ -234,6 +237,17 @@
         .pricing-content {
             text-align: center;
             max-width: 500px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 2rem 0;
+        }
+
+        .pricing-section-header {
+            margin-bottom: 3rem;
+            flex-shrink: 0;
         }
 
         .pricing-card {
@@ -242,6 +256,7 @@
             border-radius: 24px;
             padding: 2rem;
             backdrop-filter: blur(10px);
+            width: 100%;
         }
 
         .pricing-title {
@@ -309,6 +324,17 @@
             max-width: 1200px;
             width: 100%;
             padding: 2rem 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh;
+        }
+
+        .checkout-section-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            flex-shrink: 0;
         }
 
         .checkout-title {
@@ -325,7 +351,8 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 2rem;
-            margin-top: 2rem;
+            width: 100%;
+            flex: 1;
         }
 
         .order-summary, .payment-form {
@@ -521,7 +548,7 @@
         <!-- Features Section -->
         <section id="features" class="section">
             <div class="features-content">
-                <div class="section-header">
+                <div class="features-section-header">
                     <h2 class="section-title">Features</h2>
                     <button class="back-btn" onclick="showSection('home')">← Back to Home</button>
                 </div>
@@ -694,7 +721,7 @@
         <!-- Pricing Section -->
         <section id="pricing" class="section">
             <div class="pricing-content">
-                <div class="section-header">
+                <div class="pricing-section-header">
                     <h1 class="main-title">CleanSweep</h1>
                     <button class="back-btn" onclick="showSection('home')">← Back to Home</button>
                 </div>
@@ -725,7 +752,7 @@
         <!-- Checkout Section -->
         <section id="checkout" class="section">
             <div class="checkout-content">
-                <div class="section-header">
+                <div class="checkout-section-header">
                     <h1 class="checkout-title">Checkout</h1>
                     <button class="back-btn" onclick="showSection('pricing')">← Back to Pricing</button>
                 </div>
