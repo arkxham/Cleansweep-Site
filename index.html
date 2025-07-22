@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CleanSweep - The Windows multi-tool</title>
+    <title>CleanSweep - The Windows Multi-Tool</title>
     <style>
         * {
             margin: 0;
@@ -12,227 +12,954 @@
         }
 
         body {
-            font-family: 'Arial', sans-serif;
-            height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             overflow: hidden;
-            background: linear-gradient(45deg, #000000, #1a0033, #330066, #4d0099, #6600cc, #4d0099, #330066, #1a0033, #000000);
-            background-size: 400% 400%;
-            animation: gradientShift 8s ease-in-out infinite;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
+            background: #000;
+            color: white;
         }
 
-        @keyframes gradientShift {
-            0% {
-                background-position: 0% 50%;
-            }
-            50% {
-                background-position: 100% 50%;
-            }
-            100% {
-                background-position: 0% 50%;
-            }
-        }
-
-        .container {
-            text-align: center;
-            z-index: 2;
-            position: relative;
-        }
-
-        .main-title {
-            font-size: clamp(3rem, 8vw, 8rem);
-            font-weight: 900;
-            background: linear-gradient(45deg, #8a2be2, #da70d6, #9370db, #ba55d3, #8a2be2);
-            background-size: 300% 300%;
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: textGradient 4s ease-in-out infinite;
-            margin-bottom: 1rem;
-            text-shadow: 0 0 30px rgba(138, 43, 226, 0.5);
-            letter-spacing: -0.02em;
-        }
-
-        @keyframes textGradient {
-            0%, 100% {
-                background-position: 0% 50%;
-            }
-            50% {
-                background-position: 100% 50%;
-            }
-        }
-
-        .subtitle {
-            font-size: clamp(1.2rem, 3vw, 2rem);
-            color: #ffffff;
-            font-weight: 300;
-            opacity: 0.9;
-            letter-spacing: 0.1em;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-        }
-
-        .particles {
-            position: absolute;
+        #backgroundCanvas {
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            overflow: hidden;
-            z-index: 1;
-        }
-
-        .particle {
-            position: absolute;
-            background: rgba(138, 43, 226, 0.3);
-            border-radius: 50%;
-            animation: float 6s ease-in-out infinite;
-        }
-
-        .particle:nth-child(1) {
-            width: 4px;
-            height: 4px;
-            left: 10%;
-            animation-delay: 0s;
-            animation-duration: 8s;
-        }
-
-        .particle:nth-child(2) {
-            width: 6px;
-            height: 6px;
-            left: 20%;
-            animation-delay: 1s;
-            animation-duration: 10s;
-        }
-
-        .particle:nth-child(3) {
-            width: 3px;
-            height: 3px;
-            left: 30%;
-            animation-delay: 2s;
-            animation-duration: 7s;
-        }
-
-        .particle:nth-child(4) {
-            width: 5px;
-            height: 5px;
-            left: 40%;
-            animation-delay: 3s;
-            animation-duration: 9s;
-        }
-
-        .particle:nth-child(5) {
-            width: 4px;
-            height: 4px;
-            left: 50%;
-            animation-delay: 4s;
-            animation-duration: 8s;
-        }
-
-        .particle:nth-child(6) {
-            width: 6px;
-            height: 6px;
-            left: 60%;
-            animation-delay: 5s;
-            animation-duration: 11s;
-        }
-
-        .particle:nth-child(7) {
-            width: 3px;
-            height: 3px;
-            left: 70%;
-            animation-delay: 6s;
-            animation-duration: 6s;
-        }
-
-        .particle:nth-child(8) {
-            width: 5px;
-            height: 5px;
-            left: 80%;
-            animation-delay: 7s;
-            animation-duration: 10s;
-        }
-
-        .particle:nth-child(9) {
-            width: 4px;
-            height: 4px;
-            left: 90%;
-            animation-delay: 8s;
-            animation-duration: 9s;
-        }
-
-        @keyframes float {
-            0%, 100% {
-                transform: translateY(100vh) rotate(0deg);
-                opacity: 0;
-            }
-            10% {
-                opacity: 1;
-            }
-            90% {
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(-100px) rotate(360deg);
-                opacity: 0;
-            }
-        }
-
-        .glow-effect {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(138, 43, 226, 0.1) 0%, transparent 70%);
-            border-radius: 50%;
-            animation: pulse 4s ease-in-out infinite;
             z-index: 0;
         }
 
-        @keyframes pulse {
-            0%, 100% {
-                transform: translate(-50%, -50%) scale(1);
-                opacity: 0.3;
-            }
-            50% {
-                transform: translate(-50%, -50%) scale(1.2);
-                opacity: 0.1;
-            }
+        #app {
+            position: relative;
+            z-index: 10;
+            min-height: 100vh;
         }
 
+        .section {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.5s ease-in-out;
+            padding: 2rem;
+        }
+
+        .section.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Home Section */
+        .home-content {
+            text-align: center;
+            max-width: 800px;
+        }
+
+        .main-title {
+            font-size: clamp(4rem, 8vw, 8rem);
+            font-weight: bold;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #a855f7 0%, #c084fc 25%, #e879f9 50%, #c084fc 75%, #a855f7 100%);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 3s ease-in-out infinite, titlePulse 2s ease-in-out infinite;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        @keyframes titlePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        .subtitle {
+            font-size: clamp(1.2rem, 3vw, 2rem);
+            color: white;
+            margin-bottom: 4rem;
+            font-weight: 500;
+        }
+
+        .nav-buttons {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .button-row {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .nav-btn {
+            background: linear-gradient(135deg, #8b5cf6 0%, #a855f7 50%, #9333ea 100%);
+            border: 1px solid rgba(168, 85, 247, 0.5);
+            color: white;
+            padding: 1rem 2.5rem;
+            font-size: 1.25rem;
+            font-weight: 500;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(168, 85, 247, 0.25);
+        }
+
+        /* Features Section */
+        .features-content {
+            max-width: 1400px;
+            width: 100%;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: clamp(3rem, 6vw, 6rem);
+            font-weight: bold;
+            margin-bottom: 2rem;
+            background: linear-gradient(135deg, #a855f7 0%, #8b5cf6 50%, #7c3aed 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .back-btn {
+            background: transparent;
+            border: 1px solid #a855f7;
+            color: #a855f7;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .back-btn:hover {
+            background: #a855f7;
+            color: black;
+        }
+
+        .features-container {
+            background: rgba(0, 0, 0, 0.2);
+            border: 2px solid #374151;
+            border-radius: 24px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .feature-card {
+            background: rgba(17, 24, 39, 0.6);
+            border: 1px solid #4b5563;
+            border-radius: 16px;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            border-color: #a855f7;
+            transform: translateY(-2px);
+        }
+
+        .feature-card.highlighted {
+            border: 2px dashed #3b82f6;
+        }
+
+        .feature-content {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+
+        .feature-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+            margin-top: 0.25rem;
+        }
+
+        .feature-text h3 {
+            color: white;
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            line-height: 1.4;
+        }
+
+        .feature-text ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .feature-text li {
+            color: #d1d5db;
+            font-size: 0.875rem;
+            margin-bottom: 0.25rem;
+            line-height: 1.4;
+        }
+
+        /* Pricing Section */
+        .pricing-content {
+            text-align: center;
+            max-width: 500px;
+        }
+
+        .pricing-card {
+            background: rgba(17, 24, 39, 0.6);
+            border: 1px solid #4b5563;
+            border-radius: 24px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .pricing-title {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            background: linear-gradient(135deg, #a855f7 0%, #8b5cf6 50%, #7c3aed 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .pricing-options {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-option {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            border-radius: 50px;
+            border: 2px solid #4b5563;
+            background: rgba(31, 41, 55, 0.5);
+            color: white;
+            font-size: 1.125rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .pricing-option:hover {
+            border-color: #a855f7;
+        }
+
+        .pricing-option.selected {
+            border-color: #a855f7;
+            background: linear-gradient(to right, rgba(168, 85, 247, 0.3), rgba(147, 51, 234, 0.3));
+            box-shadow: 0 10px 25px rgba(168, 85, 247, 0.25);
+        }
+
+        .purchase-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #a855f7 0%, #8b5cf6 50%, #7c3aed 100%);
+            border: none;
+            color: white;
+            padding: 1rem 2rem;
+            font-size: 1.125rem;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .purchase-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(168, 85, 247, 0.25);
+        }
+
+        /* Checkout Section */
+        .checkout-content {
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .checkout-title {
+            font-size: clamp(3rem, 6vw, 5rem);
+            font-weight: bold;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #a855f7 0%, #8b5cf6 50%, #7c3aed 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .checkout-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .order-summary, .payment-form {
+            background: rgba(17, 24, 39, 0.6);
+            border: 1px solid #4b5563;
+            border-radius: 24px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .order-summary h3, .payment-form h3 {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: rgba(31, 41, 55, 0.5);
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+        }
+
+        .item-details h4 {
+            color: white;
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+
+        .item-details p {
+            color: #9ca3af;
+            font-size: 0.875rem;
+        }
+
+        .savings-badge {
+            display: inline-block;
+            background: #059669;
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            margin-top: 0.25rem;
+        }
+
+        .savings-badge.hidden {
+            display: none;
+        }
+
+        .item-price {
+            text-align: right;
+        }
+
+        .price {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .period {
+            color: #9ca3af;
+            font-size: 0.875rem;
+            margin: 0;
+        }
+
+        .order-total {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 1px solid #374151;
+        }
+
+        .order-total span:first-child {
+            color: white;
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .total-price {
+            color: #a855f7;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            color: white;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            background: rgba(31, 41, 55, 0.5);
+            border: 1px solid #4b5563;
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #a855f7;
+        }
+
+        .form-group input::placeholder {
+            color: #9ca3af;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .complete-purchase-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #a855f7 0%, #8b5cf6 50%, #7c3aed 100%);
+            border: none;
+            color: white;
+            padding: 1rem 2rem;
+            font-size: 1.125rem;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 1rem;
+        }
+
+        .complete-purchase-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(168, 85, 247, 0.25);
+        }
+
+        .security-notice {
+            color: #9ca3af;
+            font-size: 0.875rem;
+            text-align: center;
+        }
+
+        /* Responsive Design */
         @media (max-width: 768px) {
-            .main-title {
-                font-size: clamp(2rem, 12vw, 4rem);
-            }
-            
-            .subtitle {
-                font-size: clamp(1rem, 4vw, 1.5rem);
-            }
+            .section { padding: 1rem; }
+            .button-row { flex-direction: column; gap: 1rem; }
+            .nav-btn { width: 100%; max-width: 300px; }
+            .features-grid { grid-template-columns: 1fr; }
+            .checkout-grid { grid-template-columns: 1fr; }
+            .form-row { grid-template-columns: 1fr; }
+            .feature-content { flex-direction: column; text-align: center; }
+            .feature-icon { align-self: center; margin-bottom: 0.5rem; }
+        }
+
+        @media (max-width: 480px) {
+            .main-title { font-size: 3rem; }
+            .subtitle { font-size: 1rem; }
+            .section-title { font-size: 2.5rem; }
+            .checkout-title { font-size: 2.5rem; }
         }
     </style>
 </head>
 <body>
-    <div class="glow-effect"></div>
-    
-    <div class="particles">
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
+    <!-- Animated Background Canvas -->
+    <canvas id="backgroundCanvas"></canvas>
+
+    <!-- Main Container -->
+    <div id="app">
+        <!-- Home Section -->
+        <section id="home" class="section active">
+            <div class="home-content">
+                <h1 class="main-title">CleanSweep</h1>
+                <p class="subtitle">The Windows multi-tool</p>
+                
+                <div class="nav-buttons">
+                    <div class="button-row">
+                        <button class="nav-btn" onclick="showSection('features')">Features</button>
+                        <button class="nav-btn" onclick="showSection('pricing')">Pricing</button>
+                    </div>
+                    <button class="nav-btn demo-btn">Demo</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section id="features" class="section">
+            <div class="features-content">
+                <div class="section-header">
+                    <h2 class="section-title">Features</h2>
+                    <button class="back-btn" onclick="showSection('home')">← Back to Home</button>
+                </div>
+
+                <div class="features-container">
+                    <div class="features-grid">
+                        <!-- Feature Cards -->
+                        <div class="feature-card">
+                            <div class="feature-content">
+                                <div class="feature-icon">🖱️</div>
+                                <div class="feature-text">
+                                    <h3>Sensitivity Converter</h3>
+                                    <ul>
+                                        <li>• Converts mouse sensitivity between supported games</li>
+                                        <li>• Maintains consistent aim across titles</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="feature-card">
+                            <div class="feature-content">
+                                <div class="feature-icon">⏰</div>
+                                <div class="feature-text">
+                                    <h3>Game Time Tracker</h3>
+                                    <ul>
+                                        <li>• Tracks how long each game has been played</li>
+                                        <li>• Provides detailed playtime statistics</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="feature-card">
+                            <div class="feature-content">
+                                <div class="feature-icon">📤</div>
+                                <div class="feature-text">
+                                    <h3>Discord Webhook Auto-Upload</h3>
+                                    <ul>
+                                        <li>• Auto-uploads clips/screenshots to Discord webhooks</li>
+                                        <li>• Deletes local copies after upload</li>
+                                        <li>• Lightweight alternative to full clipping services</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="feature-card">
+                            <div class="feature-content">
+                                <div class="feature-icon">🌡️</div>
+                                <div class="feature-text">
+                                    <h3>Temperature & Stats Logger</h3>
+                                    <ul>
+                                        <li>• Continuously logs CPU/GPU temperatures and usage</li>
+                                        <li>• Visualize system spikes and performance trends</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="feature-card highlighted">
+                            <div class="feature-content">
+                                <div class="feature-icon">⚙️</div>
+                                <div class="feature-text">
+                                    <h3>Game Mode Process Manager</h3>
+                                    <ul>
+                                        <li>• Kills unnecessary background processes</li>
+                                        <li>• Opens toggleable utility windows for game mode</li>
+                                        <li>• Frees up system resources for smoother gameplay</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="feature-card">
+                            <div class="feature-content">
+                                <div class="feature-icon">💾</div>
+                                <div class="feature-text">
+                                    <h3>Settings Saver & Restorer</h3>
+                                    <ul>
+                                        <li>• Backs up game/application config files</li>
+                                        <li>• Easily restores settings after corruption or reset</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="feature-card">
+                            <div class="feature-content">
+                                <div class="feature-icon">🔒</div>
+                                <div class="feature-text">
+                                    <h3>Keybind Blocker</h3>
+                                    <ul>
+                                        <li>• Blocks specific keys or key combos</li>
+                                        <li>• Manual or automatic toggling based on app status</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="feature-card">
+                            <div class="feature-content">
+                                <div class="feature-icon">🎮</div>
+                                <div class="feature-text">
+                                    <h3>Multi-Account Game Launcher</h3>
+                                    <ul>
+                                        <li>• Launch games with multiple account profiles</li>
+                                        <li>• Useful for games that don't natively support multi-logins</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="feature-card">
+                            <div class="feature-content">
+                                <div class="feature-icon">🎯</div>
+                                <div class="feature-text">
+                                    <h3>Keybinded Gaming Profiles</h3>
+                                    <ul>
+                                        <li>• Bind keys to launch your gaming setup (e.g., OBS, Discord, Valorant)</li>
+                                        <li>• Fully customizable profile launcher</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="feature-card">
+                            <div class="feature-content">
+                                <div class="feature-icon">📋</div>
+                                <div class="feature-text">
+                                    <h3>Clipboard Manager</h3>
+                                    <ul>
+                                        <li>• Stores last 10 clipboard entries</li>
+                                        <li>• Hotkey recall (e.g., Ctrl + C + 1) for quick paste</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="feature-card">
+                            <div class="feature-content">
+                                <div class="feature-icon">🗑️</div>
+                                <div class="feature-text">
+                                    <h3>Auto Clear Temporary Files & Logs</h3>
+                                    <ul>
+                                        <li>• Deletes temp files and log files at regular intervals</li>
+                                        <li>• Helps maintain disk space and reduce clutter</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="feature-card">
+                            <div class="feature-content">
+                                <div class="feature-icon">🛡️</div>
+                                <div class="feature-text">
+                                    <h3>Encrypted Account Manager</h3>
+                                    <ul>
+                                        <li>• GUI to manage saved logins securely</li>
+                                        <li>• All credentials are encrypted locally</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pricing Section -->
+        <section id="pricing" class="section">
+            <div class="pricing-content">
+                <div class="section-header">
+                    <h1 class="main-title">CleanSweep</h1>
+                    <button class="back-btn" onclick="showSection('home')">← Back to Home</button>
+                </div>
+
+                <div class="pricing-card">
+                    <h2 class="pricing-title">Pricing</h2>
+                    
+                    <div class="pricing-options">
+                        <button class="pricing-option" data-plan="month" onclick="selectPlan('month')">
+                            <span>Month</span>
+                            <span>4.99$</span>
+                        </button>
+                        <button class="pricing-option selected" data-plan="year" onclick="selectPlan('year')">
+                            <span>Year</span>
+                            <span>19.99$</span>
+                        </button>
+                        <button class="pricing-option" data-plan="lifetime" onclick="selectPlan('lifetime')">
+                            <span>Lifetime</span>
+                            <span>35.99$</span>
+                        </button>
+                    </div>
+
+                    <button class="purchase-btn" onclick="showSection('checkout')">Purchase</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Checkout Section -->
+        <section id="checkout" class="section">
+            <div class="checkout-content">
+                <div class="section-header">
+                    <h1 class="checkout-title">Checkout</h1>
+                    <button class="back-btn" onclick="showSection('pricing')">← Back to Pricing</button>
+                </div>
+
+                <div class="checkout-grid">
+                    <!-- Order Summary -->
+                    <div class="order-summary">
+                        <h3>Order Summary</h3>
+                        <div class="order-item">
+                            <div class="item-details">
+                                <h4 id="plan-name">Yearly Plan</h4>
+                                <p>CleanSweep - The Windows multi-tool</p>
+                                <span class="savings-badge" id="savings-badge">Save 67%</span>
+                            </div>
+                            <div class="item-price">
+                                <p class="price" id="order-price">$19.99</p>
+                                <p class="period" id="order-period">/year</p>
+                            </div>
+                        </div>
+                        <div class="order-total">
+                            <span>Total</span>
+                            <span class="total-price" id="total-price">$19.99</span>
+                        </div>
+                    </div>
+
+                    <!-- Payment Form -->
+                    <div class="payment-form">
+                        <h3>Payment Details</h3>
+                        <form onsubmit="handleSubmit(event)">
+                            <div class="form-group">
+                                <label>Email Address</label>
+                                <input type="email" placeholder="your@email.com">
+                            </div>
+                            <div class="form-group">
+                                <label>Card Number</label>
+                                <input type="text" placeholder="1234 5678 9012 3456">
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Expiry Date</label>
+                                    <input type="text" placeholder="MM/YY">
+                                </div>
+                                <div class="form-group">
+                                    <label>CVC</label>
+                                    <input type="text" placeholder="123">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Cardholder Name</label>
+                                <input type="text" placeholder="John Doe">
+                            </div>
+                            <button type="submit" class="complete-purchase-btn">
+                                Complete Purchase - <span id="final-price">$19.99</span>
+                            </button>
+                        </form>
+                        <p class="security-notice">
+                            Secure payment powered by Stripe. Your information is encrypted and safe.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
 
-    <div class="container">
-        <h1 class="main-title">CleanSweep</h1>
-        <p class="subtitle">The Windows multi-tool</p>
-    </div>
+    <script>
+        // Global variables
+        let currentSection = "home"
+        let selectedPlan = "year"
+        let canvas, ctx, particles = []
+        let animationId
+
+        // Plan details
+        const planDetails = {
+            month: { name: "Monthly Plan", price: "4.99", period: "month", savings: null },
+            year: { name: "Yearly Plan", price: "19.99", period: "year", savings: "Save 67%" },
+            lifetime: { name: "Lifetime Plan", price: "35.99", period: "one-time", savings: "Best Value" },
+        }
+
+        // Initialize the application
+        document.addEventListener("DOMContentLoaded", () => {
+            initializeCanvas()
+            createParticles()
+            animate()
+            updateCheckoutDetails()
+        })
+
+        // Canvas and particle system
+        function initializeCanvas() {
+            canvas = document.getElementById("backgroundCanvas")
+            ctx = canvas.getContext("2d")
+            resizeCanvas()
+            window.addEventListener("resize", resizeCanvas)
+        }
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth
+            canvas.height = window.innerHeight
+            createParticles()
+        }
+
+        function createParticles() {
+            particles = []
+            const particleCount = 50
+
+            for (let i = 0; i < particleCount; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    vx: (Math.random() - 0.5) * 0.5,
+                    vy: (Math.random() - 0.5) * 0.5,
+                    size: Math.random() * 2 + 1,
+                    opacity: Math.random() * 0.5 + 0.1,
+                })
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+            // Draw animated gradient background
+            const time = Date.now() * 0.001
+            const gradient = ctx.createRadialGradient(
+                canvas.width / 2, canvas.height / 2, 0,
+                canvas.width / 2, canvas.height / 2, Math.max(canvas.width, canvas.height) / 2,
+            )
+
+            const purple1 = `hsla(${260 + Math.sin(time) * 10}, 70%, 25%, 1)`
+            const purple2 = `hsla(${280 + Math.cos(time * 0.7) * 15}, 60%, 15%, 1)`
+            const black = "hsla(0, 0%, 0%, 1)"
+
+            gradient.addColorStop(0, purple1)
+            gradient.addColorStop(0.6, purple2)
+            gradient.addColorStop(1, black)
+
+            ctx.fillStyle = gradient
+            ctx.fillRect(0, 0, canvas.width, canvas.height)
+
+            // Draw and update particles
+            particles.forEach((particle) => {
+                particle.x += particle.vx
+                particle.y += particle.vy
+
+                if (particle.x < 0) particle.x = canvas.width
+                if (particle.x > canvas.width) particle.x = 0
+                if (particle.y < 0) particle.y = canvas.height
+                if (particle.y > canvas.height) particle.y = 0
+
+                ctx.beginPath()
+                ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2)
+                ctx.fillStyle = `rgba(168, 85, 247, ${particle.opacity})`
+                ctx.shadowBlur = 10
+                ctx.shadowColor = "rgba(168, 85, 247, 0.5)"
+                ctx.fill()
+                ctx.shadowBlur = 0
+            })
+
+            animationId = requestAnimationFrame(animate)
+        }
+
+        // Section navigation
+        function showSection(sectionName) {
+            const currentSectionElement = document.getElementById(currentSection)
+            if (currentSectionElement) {
+                currentSectionElement.classList.remove("active")
+            }
+
+            const newSectionElement = document.getElementById(sectionName)
+            if (newSectionElement) {
+                setTimeout(() => {
+                    newSectionElement.classList.add("active")
+                }, 100)
+            }
+
+            currentSection = sectionName
+        }
+
+        // Pricing plan selection
+        function selectPlan(plan) {
+            selectedPlan = plan
+
+            document.querySelectorAll(".pricing-option").forEach((option) => {
+                option.classList.remove("selected")
+            })
+
+            document.querySelector(`[data-plan="${plan}"]`).classList.add("selected")
+            updateCheckoutDetails()
+        }
+
+        function updateCheckoutDetails() {
+            const plan = planDetails[selectedPlan]
+
+            document.getElementById("plan-name").textContent = plan.name
+            document.getElementById("order-price").textContent = `$${plan.price}`
+            document.getElementById("order-period").textContent = `/${plan.period}`
+            document.getElementById("total-price").textContent = `$${plan.price}`
+            document.getElementById("final-price").textContent = `$${plan.price}`
+
+            const savingsBadge = document.getElementById("savings-badge")
+            if (plan.savings) {
+                savingsBadge.textContent = plan.savings
+                savingsBadge.classList.remove("hidden")
+            } else {
+                savingsBadge.classList.add("hidden")
+            }
+        }
+
+        // Form submission
+        function handleSubmit(e) {
+            e.preventDefault()
+            alert("Thank you for your purchase! This is a demo - no actual payment was processed.")
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "Escape") {
+                showSection("home")
+            }
+        })
+
+        // Mouse interaction with particles
+        document.addEventListener("mousemove", (e) => {
+            const mouseX = e.clientX
+            const mouseY = e.clientY
+
+            particles.forEach((particle) => {
+                const dx = mouseX - particle.x
+                const dy = mouseY - particle.y
+                const distance = Math.sqrt(dx * dx + dy * dy)
+
+                if (distance < 100) {
+                    const force = (100 - distance) / 100
+                    particle.vx += (dx / distance) * force * 0.01
+                    particle.vy += (dy / distance) * force * 0.01
+                }
+            })
+        })
+
+        // Cleanup on page unload
+        window.addEventListener("beforeunload", () => {
+            if (animationId) {
+                cancelAnimationFrame(animationId)
+            }
+        })
+    </script>
 </body>
 </html>
